@@ -64,4 +64,4 @@ All config via environment variables:
 |---|---|---|
 | `METABASE_URL` | Yes | Metabase base URL |
 | `METABASE_API_KEY` | Yes | API key (created in Admin panel) |
-| `METABASE_DATABASE_ID` | No | Default database ID (default: 2) |
+| `METABASE_DATABASE_ID` | No | Default database ID (default: 1) |
