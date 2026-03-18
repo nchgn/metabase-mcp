@@ -1,7 +1,9 @@
 /**
  * Metabase API client — thin wrapper over fetch.
- * Config comes from env vars: METABASE_URL, METABASE_API_KEY, METABASE_DATABASE_ID
+ * Config from env vars or .env file (via METABASE_ENV_FILE).
  */
+
+import { readFileSync } from "node:fs";
 
 export interface MetabaseConfig {
   url: string;
@@ -9,7 +11,31 @@ export interface MetabaseConfig {
   defaultDatabase: number;
 }
 
+function loadDotenv(path: string): void {
+  const content = readFileSync(path, "utf-8");
+  for (const line of content.split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const eqIdx = trimmed.indexOf("=");
+    if (eqIdx === -1) continue;
+    const key = trimmed.slice(0, eqIdx).trim();
+    let value = trimmed.slice(eqIdx + 1).trim();
+    // Strip surrounding quotes
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1);
+    }
+    if (!process.env[key]) {
+      process.env[key] = value;
+    }
+  }
+}
+
 export function loadConfigFromEnv(): MetabaseConfig {
+  const envFile = process.env["METABASE_ENV_FILE"];
+  if (envFile) {
+    loadDotenv(envFile);
+  }
+
   const url = process.env["METABASE_URL"];
   const apiKey = process.env["METABASE_API_KEY"];
   const db = process.env["METABASE_DATABASE_ID"];
