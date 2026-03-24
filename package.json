@@ -1,14 +1,30 @@
 {
-  "name": "metabase-mcp",
+  "name": "metabase-mcp-agents",
   "version": "1.0.0",
-  "description": "Full Metabase MCP server — SQL queries, dashboards, cards, schema",
+  "description": "MCP server for Metabase — gives AI agents full access to query, explore, and manage content in Metabase",
   "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "mcp",
+    "metabase",
+    "model-context-protocol",
+    "ai",
+    "claude",
+    "sql",
+    "analytics",
+    "dashboards"
+  ],
   "bin": {
     "metabase-mcp": "./dist/server.js"
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.27.1",
